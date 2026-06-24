@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bike & Bed Arenal Founders Circle</title>
+  <meta name="description" content="Acceso privado Founder a la construcción de Bike & Bed Etapa 2 en La Fortuna, Costa Rica.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #F9F7F4;
+      --forest: #1A3329;
+      --green: #2D6A4F;
+      --sand: #C4A882;
+      --red: #C0392B;
+      --red-light: #E74C3C;
+      --black: #1C1C1C;
+      --white: #FFFFFF;
+      --body-font: 'DM Sans', sans-serif;
+      --display-font: 'Cormorant Garamond', serif;
+      --nav-h: 70px;
+      --ease: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--body-font); background: var(--cream); color: var(--black); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .75s var(--ease), transform .75s var(--ease); }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+    .reveal.d1 { transition-delay: .1s; }
+    .reveal.d2 { transition-delay: .2s; }
+    .reveal.d3 { transition-delay: .3s; }
+    .reveal.d4 { transition-delay: .4s; }
+    .reveal.d5 { transition-delay: .5s; }
+
+    @keyframes pulse-green  { 0%,100%{box-shadow:0 0 0 0 rgba(45,106,79,.45)}  50%{box-shadow:0 0 0 14px rgba(45,106,79,0)} }
+    @keyframes pulse-sand   { 0%,100%{box-shadow:0 0 0 0 rgba(196,168,130,.45)} 50%{box-shadow:0 0 0 14px rgba(196,168,130,0)} }
+    @keyframes dot-blink    { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,*::before,*::after { animation-duration:.01ms !important; transition-duration:.01ms !important; }
+      .reveal { opacity:1; transform:none; }
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+      padding: .9rem 2rem; border-radius: 8px; font-family: var(--body-font);
+      font-size: .9375rem; font-weight: 600; cursor: pointer; border: none;
+      transition: transform .25s var(--ease), box-shadow .25s var(--ease), background .25s var(--ease);
+      white-space: nowrap;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-green  { background: var(--green); color: var(--white); }
+    .btn-green:hover { background: var(--forest); box-shadow: 0 8px 24px rgba(26,51,41,.3); }
+    .btn-green.pulse { animation: pulse-green 3s infinite; }
+    .btn-white  { background: var(--white); color: var(--forest); }
+    .btn-white:hover { background: #eee; box-shadow: 0 8px 24px rgba(0,0,0,.15); }
+    .btn-white.pulse { animation: pulse-green 3s infinite; }
+    .btn-sand   { background: var(--sand); color: var(--forest); font-weight: 700; }
+    .btn-sand:hover { background: #b8956c; box-shadow: 0 8px 24px rgba(196,168,130,.4); }
+    .btn-sand.pulse { animation: pulse-sand 3s infinite; }
+    .btn-lg { padding: 1.1rem 2.5rem; font-size: 1rem; border-radius: 10px; }
+
+    /* ── NAV ── */
+    #nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: var(--nav-h); display: flex; align-items: center;
+      background: rgba(249,247,244,.92);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 1px 0 rgba(0,0,0,.07);
+      transition: box-shadow .4s var(--ease);
+    }
+    #nav.scrolled {
+      box-shadow: 0 2px 12px rgba(0,0,0,.1);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+    .nav-logo img { height: 38px; width: auto; }
+    .nav-right { display: flex; align-items: center; gap: .875rem; }
+
+    .lang-toggle {
+      display: flex; align-items: center;
+      border: 1.5px solid rgba(26,51,41,.25);
+      border-radius: 100px; overflow: hidden;
+    }
+    .lang-btn {
+      padding: .28rem .7rem;
+      font-size: .72rem; font-weight: 700; letter-spacing: .08em;
+      cursor: pointer; border: none; background: transparent;
+      color: rgba(26,51,41,.5);
+      font-family: var(--body-font);
+      transition: background .2s, color .2s;
+    }
+    .lang-btn.active { background: var(--forest); color: var(--white); }
+    .nav-cta { padding: .55rem 1.3rem; font-size: .875rem; }
+
+    /* ── HERO (two-column) ── */
+    #hero {
+      background: var(--cream);
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      padding: calc(var(--nav-h) + 2.5rem) 0 4rem;
+    }
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+      align-items: center;
+      width: 100%;
+    }
+    @media (min-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr 1fr; gap: 4rem; }
+    }
+    .hero-img {
+      border-radius: 20px;
+      overflow: hidden;
+      aspect-ratio: 3/4;
+      order: -1;
+    }
+    @media (min-width: 900px) {
+      .hero-img { order: 1; aspect-ratio: 4/5; }
+    }
+    .hero-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .hero-content { width: 100%; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .375rem 1rem; border-radius: 100px;
+      background: rgba(45,106,79,.08); border: 1px solid rgba(45,106,79,.22);
+      color: var(--green); font-size: .8rem; font-weight: 600;
+      letter-spacing: .07em; text-transform: uppercase; margin-bottom: 1.5rem;
+    }
+    .hero-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: dot-blink 2s infinite; }
+    .hero-h1 {
+      font-family: var(--display-font);
+      font-size: clamp(2.6rem, 5vw, 4.25rem);
+      font-weight: 500; color: var(--forest);
+      line-height: 1.06; letter-spacing: -.025em;
+      margin-bottom: 1.5rem;
+    }
+    .hero-sub {
+      font-size: clamp(.9rem, 1.6vw, 1.025rem);
+      color: #4D5E6B;
+      line-height: 1.82;
+      font-weight: 300; margin-bottom: 2.5rem;
+    }
+    .cupos-wrap { margin-bottom: 2.25rem; }
+    .cupos-label { font-size: .875rem; color: #687585; margin-bottom: .625rem; }
+    .cupos-track { width: 100%; max-width: 340px; height: 3px; background: rgba(26,51,41,.1); border-radius: 100px; overflow: hidden; }
+    .cupos-fill { height: 100%; width: 0; background: linear-gradient(90deg,var(--sand),#dfc9a8); border-radius: 100px; transition: width 1.6s cubic-bezier(.22,1,.36,1) .6s; }
+
+    /* ── SECTIONS ── */
+    section { padding: 6rem 0; }
+    .eyebrow { font-size: .72rem; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: var(--green); margin-bottom: .875rem; }
+    .eyebrow-sand { color: var(--sand); }
+    .s-title { font-family: var(--display-font); font-size: clamp(2rem,4vw,3rem); font-weight: 500; line-height: 1.12; letter-spacing: -.02em; color: var(--forest); margin-bottom: 1.25rem; }
+    .s-title-white { color: var(--white); }
+    .s-body { font-size: 1.05rem; color: #4D5E6B; line-height: 1.8; }
+    .s-body-muted { color: rgba(255,255,255,.68); }
+
+    /* ── MOVEMENT ── */
+    #movimiento { background: var(--cream); }
+    .movement-grid { display: grid; grid-template-columns: 1fr; gap: 4rem; }
+    @media (min-width: 900px) { .movement-grid { grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; } }
+
+    .stats-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 2.25rem 0; }
+    .stat-card { padding: 1.5rem; background: var(--forest); border-radius: 12px; color: var(--white); }
+    .stat-card-year { font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--sand); margin-bottom: .4rem; }
+    .stat-card-val { font-family: var(--display-font); font-size: clamp(1.4rem,3vw,1.875rem); font-weight: 500; line-height: 1.1; margin-bottom: .25rem; }
+    .stat-card-sub { font-size: .8rem; color: rgba(255,255,255,.55); line-height: 1.4; }
+
+    .cagr-tag { display: inline-flex; align-items: center; gap: .4rem; padding: .45rem 1rem; background: rgba(45,106,79,.1); border: 1px solid rgba(45,106,79,.22); border-radius: 100px; color: var(--green); font-size: .875rem; font-weight: 600; margin: .75rem 0 1.75rem; }
+    .check-list { display: flex; flex-direction: column; gap: .75rem; margin: 1.5rem 0; }
+    .check-item { display: flex; align-items: flex-start; gap: .75rem; font-size: 1rem; color: var(--black); }
+    .check-item svg { flex-shrink: 0; margin-top: 2px; }
+    .vision-box { background: var(--forest); border-radius: 14px; padding: 2rem; margin-top: 2rem; }
+    .vision-label { font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--sand); margin-bottom: .625rem; }
+    .vision-box p { font-size: 1.05rem; line-height: 1.72; color: rgba(255,255,255,.85); }
+
+    /* ── VIDEO SECTION ── */
+    #video-section { background: var(--forest); padding: 5rem 0; }
+    .video-section-header { text-align: center; margin-bottom: 2.5rem; }
+    .video-section-header .s-title { color: rgba(255,255,255,.92); margin-bottom: .5rem; }
+    .video-player {
+      position: relative; border-radius: 16px; overflow: hidden;
+      background: #000; margin: 0 auto 2.5rem;
+      width: 100%; max-width: 320px;
+      aspect-ratio: 9/16;
+    }
+    /* Recorta la barra superior/inferior de YouTube */
+    .video-player iframe {
+      position: absolute;
+      top: -60px; left: 0;
+      width: 100%;
+      height: calc(100% + 120px);
+      border: none;
+      pointer-events: auto;
+    }
+    .video-cta { text-align: center; }
+
+    /* ── WELLNESS ── */
+    #wellness { background: var(--cream); }
+    .wellness-header { text-align: center; margin-bottom: 3.5rem; }
+    .wellness-header .s-body { max-width: 540px; margin: 0 auto; }
+    .wellness-grid { display: grid; grid-template-columns: 1fr; gap: 1.125rem; }
+    @media (min-width: 600px) { .wellness-grid { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 960px) { .wellness-grid { grid-template-columns: repeat(3,1fr); } }
+    .w-card { background: var(--white); border: 1px solid rgba(0,0,0,.06); border-radius: 14px; padding: 2rem; transition: transform .3s var(--ease), box-shadow .3s var(--ease), border-color .3s; }
+    .w-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(26,51,41,.09); border-color: rgba(45,106,79,.15); }
+    .w-icon { font-size: 1.75rem; margin-bottom: 1.125rem; }
+    .w-card-title { font-family: var(--display-font); font-size: 1.3rem; font-weight: 500; color: var(--forest); margin-bottom: .5rem; line-height: 1.2; }
+    .w-card-text { font-size: .9rem; color: #687585; line-height: 1.65; }
+
+    /* ── PROOF ── */
+    #proof { background: var(--forest); color: var(--white); }
+    .proof-stats { display: grid; grid-template-columns: 1fr; background: rgba(255,255,255,.05); border-radius: 16px; overflow: hidden; margin-bottom: 5rem; }
+    @media (min-width: 700px) { .proof-stats { grid-template-columns: repeat(3,1fr); } }
+    .proof-stat { padding: 2.5rem 2rem; text-align: center; border-bottom: 1px solid rgba(255,255,255,.08); }
+    @media (min-width: 700px) { .proof-stat { border-bottom: none; border-right: 1px solid rgba(255,255,255,.08); } .proof-stat:last-child { border-right: none; } }
+    .proof-stat-val { font-family: var(--display-font); font-size: clamp(3rem,7vw,4.75rem); font-weight: 300; line-height: 1; color: var(--sand); margin-bottom: .4rem; }
+    .proof-stat-lbl { font-size: .9375rem; color: rgba(255,255,255,.6); line-height: 1.4; }
+    .proof-body { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; }
+    @media (min-width: 900px) { .proof-body { grid-template-columns: 1fr 1fr; } }
+    .proof-img { border-radius: 14px; overflow: hidden; aspect-ratio: 4/3; }
+    .proof-img img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* ── GALLERY ── */
+    #galeria { background: var(--cream); }
+    .gallery-header { text-align: center; margin-bottom: 3rem; }
+    .gallery-header .s-body { max-width: 560px; margin: 0 auto; }
+    .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .625rem; }
+    @media (min-width: 700px) { .gallery-grid { grid-template-columns: repeat(3,1fr); gap: .875rem; } }
+    @media (min-width: 1024px) {
+      .gallery-grid { grid-template-columns: repeat(4,1fr); gap: 1rem; }
+      .gallery-grid .g-item:first-child { grid-column: span 2; grid-row: span 2; aspect-ratio: auto; }
+    }
+    .g-item { position: relative; border-radius: 10px; overflow: hidden; aspect-ratio: 4/3; cursor: zoom-in; background: #d0ccc7; }
+    .g-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .55s var(--ease); }
+    .g-item:hover img { transform: scale(1.06); }
+    .g-overlay { position: absolute; inset: 0; background: linear-gradient(to top,rgba(12,24,18,.72) 0%,transparent 55%); opacity: 0; transition: opacity .3s; display: flex; align-items: flex-end; padding: .875rem; }
+    .g-item:hover .g-overlay { opacity: 1; }
+    .g-label { font-size: .8125rem; color: var(--white); font-weight: 500; line-height: 1.3; }
+
+    /* ── PRICING ── */
+    #pricing { background: linear-gradient(to bottom, var(--cream), #EDE8E1); }
+    .pricing-header { text-align: center; margin-bottom: .75rem; }
+    .pricing-subtitle { text-align: center; max-width: 620px; margin: 0 auto 3.5rem; font-size: 1rem; color: #4D5E6B; line-height: 1.7; }
+    .pricing-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; max-width: 900px; margin: 0 auto; }
+    @media (min-width: 740px) { .pricing-grid { grid-template-columns: 1fr 1fr; } }
+
+    .p-card { border-radius: 16px; padding: 2.5rem; position: relative; overflow: hidden; }
+    .p-card-insider { background: var(--white); border: 1.5px solid rgba(0,0,0,.08); }
+    .p-card-vip { background: var(--forest); color: var(--white); }
+    .p-card-vip::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg,var(--sand),#e8cfa8); }
+
+    .p-tier { font-size: .7rem; font-weight: 600; letter-spacing: .13em; text-transform: uppercase; color: var(--green); margin-bottom: .6rem; }
+    .p-card-vip .p-tier { color: var(--sand); }
+    .p-name { font-family: var(--display-font); font-size: 1.875rem; font-weight: 500; color: var(--forest); margin-bottom: .5rem; }
+    .p-card-vip .p-name { color: var(--white); }
+    .p-desc { font-size: .875rem; color: #687585; line-height: 1.5; margin-bottom: .875rem; }
+    .p-card-vip .p-desc { color: rgba(255,255,255,.6); }
+
+    .p-price { font-family: var(--display-font); font-size: 3.5rem; font-weight: 300; line-height: 1; color: var(--forest); margin: .875rem 0 1rem; }
+    .p-card-vip .p-price { color: var(--sand); }
+    .p-price sup { font-size: 1.5rem; vertical-align: super; }
+    .p-price .cents { font-size: 2rem; }
+
+    /* Red VIP badge */
+    .p-badge-red {
+      display: inline-flex; align-items: center; gap: .35rem;
+      padding: .3rem .85rem; border-radius: 100px;
+      font-size: .72rem; font-weight: 700; letter-spacing: .04em;
+      background: var(--red); color: var(--white);
+      margin-bottom: 1.5rem;
+    }
+    .p-badge-red::before { content: '●'; font-size: .5rem; }
+
+    .p-divider { height: 1px; background: rgba(0,0,0,.07); margin: 1.375rem 0; }
+    .p-card-vip .p-divider { background: rgba(255,255,255,.1); }
+    .p-also { font-size: .75rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--sand); margin-bottom: .875rem; }
+
+    .p-features { display: flex; flex-direction: column; gap: .875rem; margin-bottom: 2rem; }
+    .p-feature { display: flex; align-items: flex-start; gap: .75rem; font-size: .9375rem; }
+    .p-icon { flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; background: rgba(45,106,79,.1); display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+    .p-card-vip .p-icon { background: rgba(196,168,130,.2); }
+    .p-feature-text { color: #4D5E6B; line-height: 1.5; }
+    .p-card-vip .p-feature-text { color: rgba(255,255,255,.78); }
+
+    .p-event { margin-bottom: 1.5rem; }
+    .p-event-label { font-size: .72rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.5); margin-bottom: .25rem; }
+    .p-event-date { font-family: var(--display-font); font-size: 1.5rem; font-weight: 400; color: var(--sand); }
+
+    .p-cta { width: 100%; letter-spacing: .03em; }
+    .p-card-vip .p-cta { background: var(--sand); color: var(--forest); animation: pulse-sand 3s infinite; }
+    .p-card-vip .p-cta:hover { background: #b8956c; box-shadow: 0 8px 28px rgba(196,168,130,.35); }
+
+    .p-micro { font-size: .82rem; color: #8A9BAB; line-height: 1.5; margin-top: 1rem; text-align: center; }
+    .p-card-vip .p-micro { color: rgba(255,255,255,.4); }
+
+    .pricing-quote-block {
+      text-align: center; max-width: 680px; margin: 3.5rem auto 0;
+      padding: 2.5rem; background: rgba(26,51,41,.06); border-radius: 16px;
+      border: 1px solid rgba(26,51,41,.08);
+    }
+    .pricing-quote-block p {
+      font-size: 1rem; color: #4D5E6B; line-height: 1.8;
+      font-style: italic;
+    }
+    .pricing-final-cta { text-align: center; margin-top: 2.5rem; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--black); color: rgba(255,255,255,.55); padding: 3rem 0; }
+    .footer-inner { display: flex; flex-direction: column; align-items: center; gap: 1.125rem; text-align: center; }
+    .footer-logo img { height: 32px; width: auto; filter: brightness(0) invert(1); opacity: .8; }
+    .footer-contact { font-size: .9375rem; }
+    .footer-contact a { color: var(--sand); transition: opacity .2s; }
+    .footer-contact a:hover { opacity: .75; }
+    .footer-copy { font-size: .8125rem; color: rgba(255,255,255,.3); }
+
+    .footer-legal {
+      width: 100%;
+      border-top: 1px solid rgba(255,255,255,.07);
+      margin-top: 1.5rem;
+      padding-top: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: .625rem;
+    }
+    .footer-legal p {
+      font-size: .73rem;
+      color: rgba(255,255,255,.22);
+      line-height: 1.6;
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .footer-legal-fb {
+      font-size: .73rem;
+      color: rgba(255,255,255,.28);
+      line-height: 1.6;
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    /* ── LIGHTBOX ── */
+    #lightbox { position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,.93); display: none; align-items: center; justify-content: center; padding: 1.5rem; cursor: zoom-out; }
+    #lightbox.open { display: flex; }
+    #lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: 10px; pointer-events: none; }
+    .lb-close { position: absolute; top: 1.25rem; right: 1.25rem; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,.1); border: none; color: var(--white); font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .2s; }
+    .lb-close:hover { background: rgba(255,255,255,.2); }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--cream); }
+    ::-webkit-scrollbar-thumb { background: var(--sand); border-radius: 3px; }
+
+    /* ── CHECK SVG helper ── */
+    .chk-green { display:inline-block; flex-shrink:0; }
+    .chk-sand  { display:inline-block; flex-shrink:0; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav id="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo">
+        <img src="imgs/LOGO%20BIKE%20AND%20BED%20400x192px%20(400%20x%20100%20px)%20trans.png" alt="Bike &amp; Bed">
+      </a>
+      <div class="nav-right">
+        <div class="lang-toggle" role="group" aria-label="Language">
+          <button class="lang-btn active" id="btn-es" onclick="setLang('es')" aria-pressed="true">ES</button>
+          <button class="lang-btn" id="btn-en" onclick="setLang('en')" aria-pressed="false">EN</button>
+        </div>
+        <a href="#pricing" class="btn btn-green nav-cta" data-i18n="nav.join">Unirme</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <!-- Texto izquierda -->
+      <div class="hero-content">
+        <div class="hero-badge"><span class="hero-dot"></span><span data-i18n="hero.badge">Etapa 2 · La Fortuna, Costa Rica</span></div>
+        <h1 class="hero-h1" data-i18n-html="hero.title">Bike &amp; Bed Arenal<br>Founders Circle</h1>
+        <p class="hero-sub" data-i18n-html="hero.sub">Entra antes que el público a la construcción de Bike &amp; Bed Etapa 2 en La Fortuna.<br><br>Sé parte del círculo privado que verá desde adentro cómo estamos creando un wellness cycling resort diseñado para unir hospitalidad boutique, ciclismo, recuperación, naturaleza y comunidad global.<br><br>Esto no es una inversión. Es tu acceso Founder al proceso, la visión y la comunidad antes de que Bike &amp; Bed Etapa 2 abra al público.</p>
+        <div class="cupos-wrap">
+          <p class="cupos-label" data-i18n="hero.cupos">35 de 300 cupos Founders ocupados</p>
+          <div class="cupos-track"><div class="cupos-fill" id="cuposBar" data-pct="11.67"></div></div>
+        </div>
+        <a href="#pricing" class="btn btn-green btn-lg pulse" data-i18n="hero.cta">Quiero entrar al Founders Circle</a>
+      </div>
+      <!-- Imagen derecha -->
+      <div class="hero-img">
+        <img src="imgs/bikeandbedetapa2%207.jpeg" alt="Bike &amp; Bed Etapa 2 con Volcán Arenal">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ MOVIMIENTO GLOBAL ═══════════ -->
+<section id="movimiento">
+  <div class="container">
+    <div class="movement-grid">
+      <div>
+        <p class="eyebrow reveal" data-i18n="mov.eyebrow">El mercado</p>
+        <h2 class="s-title reveal" data-i18n="mov.title">Mucho más que un hotel: un movimiento global</h2>
+        <p class="s-body reveal" data-i18n="mov.body">¿Sabías que el ciclismo es el deporte más practicado del mundo? El turismo deportivo crecerá de manera exponencial en la próxima década.</p>
+        <div class="stats-duo">
+          <div class="stat-card reveal d1">
+            <div class="stat-card-year" data-i18n="mov.s1.year">2024</div>
+            <div class="stat-card-val">US$618.7B</div>
+            <div class="stat-card-sub" data-i18n="mov.s1.sub">Turismo deportivo global</div>
+          </div>
+          <div class="stat-card reveal d2">
+            <div class="stat-card-year" data-i18n="mov.s2.year">2032</div>
+            <div class="stat-card-val">US$2,089.6B</div>
+            <div class="stat-card-sub" data-i18n="mov.s2.sub">Proyección de mercado</div>
+          </div>
+        </div>
+        <div class="cagr-tag reveal">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span data-i18n="mov.cagr">CAGR ~16.4% · crecimiento anual compuesto</span>
+        </div>
+        <p class="s-body reveal" data-i18n="mov.body2">Bike &amp; Bed une ciclismo, naturaleza y bienestar. Tras el éxito rotundo de la Etapa 1, la Etapa 2 consolida La Fortuna como epicentro mundial del turismo ciclista y regenerativo.</p>
+      </div>
+      <div>
+        <p class="eyebrow reveal" data-i18n="mov.list.eyebrow">Etapa 2 incluye</p>
+        <ul class="check-list">
+          <li class="check-item reveal d1">
+            <svg class="chk-green" width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#2D6A4F" stroke-width="1.5"/><path d="M6.5 10l2.5 2.5 4.5-4.5" stroke="#2D6A4F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span data-i18n="mov.l1">25 a 50 habitaciones premium</span>
+          </li>
+          <li class="check-item reveal d1">
+            <svg class="chk-green" width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#2D6A4F" stroke-width="1.5"/><path d="M6.5 10l2.5 2.5 4.5-4.5" stroke="#2D6A4F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span data-i18n="mov.l2">Spa de alto impacto y biohacking lab</span>
+          </li>
+          <li class="check-item reveal d2">
+            <svg class="chk-green" width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#2D6A4F" stroke-width="1.5"/><path d="M6.5 10l2.5 2.5 4.5-4.5" stroke="#2D6A4F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span data-i18n="mov.l3">Restaurante saludable y gimnasio de rendimiento</span>
+          </li>
+          <li class="check-item reveal d2">
+            <svg class="chk-green" width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#2D6A4F" stroke-width="1.5"/><path d="M6.5 10l2.5 2.5 4.5-4.5" stroke="#2D6A4F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span data-i18n="mov.l4">Piscinas termales naturales</span>
+          </li>
+          <li class="check-item reveal d3">
+            <svg class="chk-green" width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#2D6A4F" stroke-width="1.5"/><path d="M6.5 10l2.5 2.5 4.5-4.5" stroke="#2D6A4F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span data-i18n="mov.l5">Cowork lounge y bike center profesional</span>
+          </li>
+        </ul>
+        <div class="vision-box reveal">
+          <p class="vision-label" data-i18n="mov.vision.label">Visión</p>
+          <p data-i18n="mov.vision.text">Crear un destino transformacional donde cuerpo, mente y comunidad se regeneran. No es solo descansar, es volver a la vida.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ VIDEO ═══════════ -->
+<section id="video-section">
+  <div class="container">
+    <div class="video-section-header">
+      <h2 class="s-title reveal" data-i18n="vid.title">Sleep · Ride · Recover · Transform</h2>
+      <p class="reveal" style="color:rgba(255,255,255,.5);font-size:1rem;" data-i18n="vid.sub">El primer wellness resort para ciclistas de América Latina</p>
+    </div>
+    <div class="video-player reveal">
+      <iframe
+        src="https://www.youtube.com/embed/MQO3oIwbDjI?autoplay=1&mute=1&loop=1&playlist=MQO3oIwbDjI&rel=0&modestbranding=1&controls=0&disablekb=1&iv_load_policy=3&playsinline=1"
+        title="Bike &amp; Bed Arenal — Founders Circle"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+    <div class="video-cta reveal">
+      <a href="#pricing" class="btn btn-sand btn-lg pulse" data-i18n="vid.cta">Quiero entrar al Founders Circle</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ WELLNESS HUB ═══════════ -->
+<section id="wellness">
+  <div class="container">
+    <div class="wellness-header">
+      <p class="eyebrow reveal" data-i18n="well.eyebrow">El corazón del proyecto</p>
+      <h2 class="s-title reveal" data-i18n="well.title">El Wellness Hub</h2>
+      <p class="s-body reveal" data-i18n="well.body">Un santuario entre el Volcán Arenal y la selva tropical que redefine el concepto de spa.</p>
+    </div>
+    <div class="wellness-grid">
+      <div class="w-card reveal d1"><div class="w-icon">🌙</div><h3 class="w-card-title" data-i18n="well.c1.t">Sleep Retreat Zone</h3><p class="w-card-text" data-i18n="well.c1.b">Iluminación circadiana, aromaterapia, blackout real y menú de sueño para recuperación profunda.</p></div>
+      <div class="w-card reveal d2"><div class="w-icon">💧</div><h3 class="w-card-title" data-i18n="well.c2.t">Hydrothermal &amp; Recovery</h3><p class="w-card-text" data-i18n="well.c2.b">Sauna IR, cold plunge, duchas de contraste y jacuzzis naturales para recuperación muscular.</p></div>
+      <div class="w-card reveal d3"><div class="w-icon">⚡</div><h3 class="w-card-title" data-i18n="well.c3.t">Biohacking Cyclist Lab</h3><p class="w-card-text" data-i18n="well.c3.b">Oxigenoterapia, HRV testing, crioterapia y recuperación muscular avanzada.</p></div>
+      <div class="w-card reveal d1"><div class="w-icon">🥗</div><h3 class="w-card-title" data-i18n="well.c4.t">Restaurante Saludable</h3><p class="w-card-text" data-i18n="well.c4.b">Comida funcional, fermentos, cacao recovery y smoothies post-ride para rendimiento óptimo.</p></div>
+      <div class="w-card reveal d2"><div class="w-icon">🔥</div><h3 class="w-card-title" data-i18n="well.c5.t">Sauna Social Nights</h3><p class="w-card-text" data-i18n="well.c5.b">Ritual colectivo, mocktails, fogata y comunidad. La recuperación como experiencia social.</p></div>
+      <div class="w-card reveal d3"><div class="w-icon">🌿</div><h3 class="w-card-title" data-i18n="well.c6.t">Sostenibilidad</h3><p class="w-card-text" data-i18n="well.c6.b">Materiales locales, energía solar y reuso de aguas termales. En armonía con la selva.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SOCIAL PROOF ═══════════ -->
+<section id="proof">
+  <div class="container">
+    <div class="proof-stats reveal">
+      <div class="proof-stat"><div class="proof-stat-val" data-i18n="proof.s1.val">90%</div><div class="proof-stat-lbl" data-i18n="proof.s1.lbl">ocupación dic 2025</div></div>
+      <div class="proof-stat"><div class="proof-stat-val" data-i18n="proof.s2.val">5</div><div class="proof-stat-lbl" data-i18n="proof.s2.lbl">villas construidas en 7 meses</div></div>
+      <div class="proof-stat"><div class="proof-stat-val" data-i18n="proof.s3.val">2026</div><div class="proof-stat-lbl" data-i18n="proof.s3.lbl">reservas confirmadas</div></div>
+    </div>
+    <div class="proof-body">
+      <div>
+        <p class="eyebrow eyebrow-sand reveal" data-i18n="proof.eyebrow">Esto ya funciona</p>
+        <h2 class="s-title s-title-white reveal" data-i18n="proof.title">La Etapa 1 ya opera en La Fortuna</h2>
+        <p class="s-body s-body-muted reveal" data-i18n="proof.body">No partimos de cero: 5 villas de lujo construidas en 7 meses, 90% de ocupación en diciembre 2025 (promedio actual 75%) y reservas confirmadas hasta finales de 2026. La Etapa 2 escala un modelo probado en uno de los destinos más visitados de Costa Rica.</p>
+        <a href="#pricing" class="btn btn-green reveal" style="margin-top:2rem;" data-i18n="proof.cta">Quiero entrar al Founders Circle</a>
+      </div>
+      <div class="proof-img reveal d2">
+        <img src="imgs/bikeandbedetapa2%202.jpeg" alt="Vista aérea Bike &amp; Bed" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ GALERÍA ═══════════ -->
+<section id="galeria">
+  <div class="container">
+    <div class="gallery-header">
+      <p class="eyebrow reveal" data-i18n="gal.eyebrow">La visión</p>
+      <h2 class="s-title reveal" data-i18n="gal.title">Construimos a la sombra del Arenal</h2>
+      <p class="s-body reveal" data-i18n="gal.body">Cabañas modulares de arquitectura limpia, inmersas en la selva y enmarcadas por el volcán. Un refugio para ciclistas y viajeros que buscan diseño, naturaleza y comunidad.</p>
+    </div>
+    <div class="gallery-grid">
+      <div class="g-item reveal"    onclick="lb('imgs/bikeandbedetapa2%201.jpeg','Senderos entre cabañas')"><img src="imgs/bikeandbedetapa2%201.jpeg" alt="" loading="lazy"><div class="g-overlay"><span class="g-label" data-i18n="gal.i1">Senderos entre cabañas</span></div></div>
+      <div class="g-item reveal d1" onclick="lb('imgs/bikeandbedetapa2%202.jpeg','Vista aérea · Etapa 2')"><img src="imgs/bikeandbedetapa2%202.jpeg" alt="" loading="lazy"><div class="g-overlay"><span class="g-label" data-i18n="gal.i2">Vista aérea · Etapa 2</span></div></div>
+      <div class="g-item reveal d2" onclick="lb('imgs/bikeandbedetapa2%203.jpeg','Fachadas abiertas a la selva')"><img src="imgs/bikeandbedetapa2%203.jpeg" alt="" loading="lazy"><div class="g-overlay"><span class="g-label" data-i18n="gal.i3">Fachadas abiertas a la selva</span></div></div>
+      <div class="g-item reveal d1" onclick="lb('imgs/bikeandbedetapa2%204.jpeg','Diseño modular en armonía')"><img src="imgs/bikeandbedetapa2%204.jpeg" alt="" loading="lazy"><div class="g-overlay"><span class="g-label" data-i18n="gal.i4">Diseño modular en armonía</span></div></div>
+      <div class="g-item reveal d2" onclick="lb('imgs/bikeandbedetapa2%205.jpeg','Cabañas en la selva')"><img src="imgs/bikeandbedetapa2%205.jpeg" alt="" loading="lazy"><div class="g-overlay"><span class="g-label" data-i18n="gal.i5">Cabañas en la selva</span></div></div>
+      <div class="g-item reveal d3" onclick="lb('imgs/bikeandbedetapa2%206.jpeg','Arquitectura tropical')"><img src="imgs/bikeandbedetapa2%206.jpeg" alt="" loading="lazy"><div class="g-overlay"><span class="g-label" data-i18n="gal.i6">Arquitectura tropical</span></div></div>
+      <div class="g-item reveal d1" onclick="lb('imgs/bikeandbedetapa2%207.jpeg','Detalles arquitectónicos')"><img src="imgs/bikeandbedetapa2%207.jpeg" alt="" loading="lazy"><div class="g-overlay"><span class="g-label" data-i18n="gal.i7">Detalles arquitectónicos</span></div></div>
+      <div class="g-item reveal d2" onclick="lb('imgs/bikeandbedetapa2%208.jpeg','Interiores cálidos y luminosos')"><img src="imgs/bikeandbedetapa2%208.jpeg" alt="" loading="lazy"><div class="g-overlay"><span class="g-label" data-i18n="gal.i8">Interiores cálidos y luminosos</span></div></div>
+      <div class="g-item reveal d3" onclick="lb('imgs/bikeandbedetapa2%209.jpeg','Habitación premium')"><img src="imgs/bikeandbedetapa2%209.jpeg" alt="" loading="lazy"><div class="g-overlay"><span class="g-label" data-i18n="gal.i9">Habitación premium</span></div></div>
+      <div class="g-item reveal d1" onclick="lb('imgs/bikeandbedetapa2%2010.jpeg','Habitaciones para descanso profundo')"><img src="imgs/bikeandbedetapa2%2010.jpeg" alt="" loading="lazy"><div class="g-overlay"><span class="g-label" data-i18n="gal.i10">Habitaciones para descanso profundo</span></div></div>
+      <div class="g-item reveal d2" onclick="lb('imgs/terreno1.jpeg','Volcán Arenal · La Fortuna')"><img src="imgs/terreno1.jpeg" alt="" loading="lazy"><div class="g-overlay"><span class="g-label" data-i18n="gal.i11">Volcán Arenal · La Fortuna</span></div></div>
+      <div class="g-item reveal d3" onclick="lb('imgs/terreno%204.jpeg','El terreno · Etapa 2')"><img src="imgs/terreno%204.jpeg" alt="" loading="lazy"><div class="g-overlay"><span class="g-label" data-i18n="gal.i12">El terreno · Etapa 2</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PRICING ═══════════ -->
+<section id="pricing">
+  <div class="container">
+    <div class="pricing-header">
+      <p class="eyebrow reveal" data-i18n="price.eyebrow">Dos formas de entrar primero</p>
+      <h2 class="s-title reveal" data-i18n="price.title">Elige cómo quieres entrar al Founders Circle</h2>
+    </div>
+    <p class="pricing-subtitle reveal" data-i18n="price.subtitle">Acceso privado para conocer Bike &amp; Bed Etapa 2 desde adentro antes de que abra al público. Esto no es una inversión; es tu entrada al círculo Founder.</p>
+
+    <div class="pricing-grid">
+
+      <!-- INSIDER -->
+      <div class="p-card p-card-insider reveal">
+        <p class="p-tier" data-i18n="price.ins.tier">Founder Insider Access</p>
+        <h3 class="p-name" data-i18n="price.ins.name">Insider</h3>
+        <p class="p-desc" data-i18n="price.ins.desc">Acceso digital al círculo privado de Bike &amp; Bed Etapa 2.</p>
+        <div class="p-price"><sup>$</sup>27<span class="cents">.99</span></div>
+        <div class="p-divider"></div>
+        <ul class="p-features">
+          <li class="p-feature"><span class="p-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 4-4" stroke="#2D6A4F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="p-feature-text" data-i18n="price.ins.f1">Acceso al grupo privado de actualizaciones semanales de Etapa 2</span></li>
+          <li class="p-feature"><span class="p-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 4-4" stroke="#2D6A4F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="p-feature-text" data-i18n="price.ins.f2">Renders, avances y behind the scenes del proyecto</span></li>
+          <li class="p-feature"><span class="p-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 4-4" stroke="#2D6A4F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="p-feature-text" data-i18n="price.ins.f3">Masterclass privada: "Cómo estamos construyendo un destino turístico premium en La Fortuna"</span></li>
+          <li class="p-feature"><span class="p-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 4-4" stroke="#2D6A4F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="p-feature-text" data-i18n="price.ins.f4">Historia completa de Bike &amp; Bed: de Etapa 1 a la visión de Etapa 2</span></li>
+          <li class="p-feature"><span class="p-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 4-4" stroke="#2D6A4F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="p-feature-text" data-i18n="price.ins.f5">Tu nombre en el Founders Wall digital</span></li>
+          <li class="p-feature"><span class="p-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 4-4" stroke="#2D6A4F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="p-feature-text" data-i18n="price.ins.f6">Acceso prioritario a futuras experiencias, preventas y eventos Founder</span></li>
+        </ul>
+        <a href="https://pay.hotmart.com/L106459327A?bid=1782311426265" target="_blank" rel="noopener" class="btn btn-green btn-lg p-cta pulse" data-i18n="price.ins.cta">ENTRAR AL FOUNDERS CIRCLE — $27.99</a>
+        <p class="p-micro" data-i18n="price.ins.micro">Cupos limitados para mantener la comunidad Founder cercana y curada.</p>
+      </div>
+
+      <!-- VIP -->
+      <div class="p-card p-card-vip reveal d2">
+        <p class="p-tier" data-i18n="price.vip.tier">Founder VIP Experience</p>
+        <h3 class="p-name" data-i18n="price.vip.name">VIP</h3>
+        <p class="p-desc" data-i18n="price.vip.desc">Todo lo del Insider Access, más acceso presencial en La Fortuna.</p>
+        <div class="p-price"><sup>$</sup>99</div>
+        <span class="p-badge-red" data-i18n="price.vip.badge">Solo 50 cupos VIP</span>
+        <div class="p-divider"></div>
+        <p class="p-also" data-i18n="price.vip.also">Todo lo del Founder Insider Access, más:</p>
+        <ul class="p-features">
+          <li class="p-feature"><span class="p-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 4-4" stroke="#C4A882" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="p-feature-text" data-i18n="price.vip.f1">Invitación al evento privado presencial en La Fortuna</span></li>
+          <li class="p-feature"><span class="p-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 4-4" stroke="#C4A882" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="p-feature-text" data-i18n="price.vip.f2">Tour guiado de Etapa 1 y terreno de Etapa 2 con el equipo</span></li>
+          <li class="p-feature"><span class="p-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 4-4" stroke="#C4A882" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="p-feature-text" data-i18n="price.vip.f3">Sesión privada de preguntas con los fundadores</span></li>
+          <li class="p-feature"><span class="p-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 4-4" stroke="#C4A882" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="p-feature-text" data-i18n="price.vip.f4">Prioridad para aplicar a futuras conversaciones privadas del proyecto, si tu perfil califica</span></li>
+        </ul>
+        <div class="p-event">
+          <p class="p-event-label" data-i18n="price.vip.event.label">Evento Founder Presencial en La Fortuna</p>
+          <p class="p-event-date" data-i18n="price.vip.event.date">1 de Agosto 2026</p>
+        </div>
+        <a href="https://pay.hotmart.com/F106473318W" target="_blank" class="btn btn-lg p-cta" data-i18n="price.vip.cta">RESERVAR MI ACCESO VIP — $99</a>
+        <p class="p-micro" data-i18n="price.vip.micro">Ideal para quienes quieren conocer el proyecto en persona y acercarse al equipo fundador.</p>
+      </div>
+    </div>
+
+    <!-- QUOTE BLOCK -->
+    <div class="pricing-quote-block reveal">
+      <p data-i18n="price.quote">Esto no es una oferta de inversión. Es tu acceso privado para conocer desde adentro cómo estamos construyendo Bike &amp; Bed Etapa 2 antes de que abra al público. Las futuras oportunidades privadas, si existieran, serán compartidas únicamente con personas calificadas.</p>
+    </div>
+    <div class="pricing-final-cta reveal">
+      <a href="#" class="btn btn-green btn-lg pulse" data-i18n="price.final.cta">Asegurar mi cupo</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-logo"><img src="imgs/LOGO%20BIKE%20AND%20BED%20400x192px%20(400%20x%20100%20px)%20trans.png" alt="Bike &amp; Bed"></div>
+      <p class="footer-contact"><a href="mailto:info@bikeandbedhotels.com">info@bikeandbedhotels.com</a> · La Fortuna, Costa Rica</p>
+      <p class="footer-copy" data-i18n="footer.copy">© 2026 Bike &amp; Bed. Todos los derechos reservados.</p>
+
+      <div class="footer-legal">
+        <p class="footer-legal-fb">
+          Este sitio no forma parte de Facebook ni de Meta Platforms, Inc. Facebook es una marca registrada de Meta Platforms, Inc.
+          Este sitio tampoco está respaldado por Facebook de ninguna manera.
+        </p>
+        <p>
+          Este sitio web es operado por Bike &amp; Bed Hotels. El acceso al Founders Circle es una experiencia privada de información y comunidad, no una oferta de inversión ni un instrumento financiero.
+          Los testimonios, cifras de ocupación y proyecciones de mercado mencionados son referenciales y no garantizan resultados futuros.
+          Las futuras oportunidades privadas de participación en el proyecto, si existieran, serán ofrecidas exclusivamente a personas calificadas conforme a la normativa aplicable.
+        </p>
+        <p>
+          Al adquirir cualquiera de los accesos Founder, usted acepta los términos y condiciones del servicio y la política de privacidad de Bike &amp; Bed.
+          Para consultas: <a href="mailto:info@bikeandbedhotels.com" style="color:rgba(255,255,255,.35);">info@bikeandbedhotels.com</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" onclick="closeLb()">
+  <button class="lb-close" onclick="closeLb()">✕</button>
+  <img id="lbImg" src="" alt="">
+</div>
+
+<script>
+// ─── TRANSLATIONS ───────────────────────────────────────────────
+const TR = {
+  es: {
+    'nav.join': 'Unirme',
+    'hero.badge': 'Etapa 2 · La Fortuna, Costa Rica',
+    'hero.title': 'Bike &amp; Bed Arenal<br>Founders Circle',
+    'hero.sub': 'Entra antes que el público a la construcción de Bike &amp; Bed Etapa 2 en La Fortuna.<br><br>Sé parte del círculo privado que verá desde adentro cómo estamos creando un wellness cycling resort diseñado para unir hospitalidad boutique, ciclismo, recuperación, naturaleza y comunidad global.<br><br>Esto no es una inversión. Es tu acceso Founder al proceso, la visión y la comunidad antes de que Bike &amp; Bed Etapa 2 abra al público.',
+    'hero.cupos': '35 de 300 cupos Founders ocupados',
+    'hero.cta': 'Quiero entrar al Founders Circle',
+    'mov.eyebrow': 'El mercado',
+    'mov.title': 'Mucho más que un hotel: un movimiento global',
+    'mov.body': '¿Sabías que el ciclismo es el deporte más practicado del mundo? El turismo deportivo crecerá de manera exponencial en la próxima década.',
+    'mov.s1.year': '2024', 'mov.s1.sub': 'Turismo deportivo global',
+    'mov.s2.year': '2032', 'mov.s2.sub': 'Proyección de mercado',
+    'mov.cagr': 'CAGR ~16.4% · crecimiento anual compuesto',
+    'mov.body2': 'Bike &amp; Bed une ciclismo, naturaleza y bienestar. Tras el éxito rotundo de la Etapa 1, la Etapa 2 consolida La Fortuna como epicentro mundial del turismo ciclista y regenerativo.',
+    'mov.list.eyebrow': 'Etapa 2 incluye',
+    'mov.l1': '25 a 50 habitaciones premium',
+    'mov.l2': 'Spa de alto impacto y biohacking lab',
+    'mov.l3': 'Restaurante saludable y gimnasio de rendimiento',
+    'mov.l4': 'Piscinas termales naturales',
+    'mov.l5': 'Cowork lounge y bike center profesional',
+    'mov.vision.label': 'Visión',
+    'mov.vision.text': 'Crear un destino transformacional donde cuerpo, mente y comunidad se regeneran. No es solo descansar, es volver a la vida.',
+    'vid.title': 'Sleep · Ride · Recover · Transform',
+    'vid.sub': 'El primer wellness resort para ciclistas de América Latina',
+    'vid.cta': 'Quiero entrar al Founders Circle',
+    'well.eyebrow': 'El corazón del proyecto',
+    'well.title': 'El Wellness Hub',
+    'well.body': 'Un santuario entre el Volcán Arenal y la selva tropical que redefine el concepto de spa.',
+    'well.c1.t': 'Sleep Retreat Zone', 'well.c1.b': 'Iluminación circadiana, aromaterapia, blackout real y menú de sueño para recuperación profunda.',
+    'well.c2.t': 'Hydrothermal &amp; Recovery', 'well.c2.b': 'Sauna IR, cold plunge, duchas de contraste y jacuzzis naturales para recuperación muscular.',
+    'well.c3.t': 'Biohacking Cyclist Lab', 'well.c3.b': 'Oxigenoterapia, HRV testing, crioterapia y recuperación muscular avanzada.',
+    'well.c4.t': 'Restaurante Saludable', 'well.c4.b': 'Comida funcional, fermentos, cacao recovery y smoothies post-ride para rendimiento óptimo.',
+    'well.c5.t': 'Sauna Social Nights', 'well.c5.b': 'Ritual colectivo, mocktails, fogata y comunidad. La recuperación como experiencia social.',
+    'well.c6.t': 'Sostenibilidad', 'well.c6.b': 'Materiales locales, energía solar y reuso de aguas termales. En armonía con la selva.',
+    'proof.eyebrow': 'Esto ya funciona',
+    'proof.s1.val': '90%', 'proof.s1.lbl': 'ocupación dic 2025',
+    'proof.s2.val': '5',   'proof.s2.lbl': 'villas construidas en 7 meses',
+    'proof.s3.val': '2026','proof.s3.lbl': 'reservas confirmadas',
+    'proof.title': 'La Etapa 1 ya opera en La Fortuna',
+    'proof.body': 'No partimos de cero: 5 villas de lujo construidas en 7 meses, 90% de ocupación en diciembre 2025 (promedio actual 75%) y reservas confirmadas hasta finales de 2026. La Etapa 2 escala un modelo probado en uno de los destinos más visitados de Costa Rica.',
+    'proof.cta': 'Quiero entrar al Founders Circle',
+    'gal.eyebrow': 'La visión',
+    'gal.title': 'Construimos a la sombra del Arenal',
+    'gal.body': 'Cabañas modulares de arquitectura limpia, inmersas en la selva y enmarcadas por el volcán. Un refugio para ciclistas y viajeros que buscan diseño, naturaleza y comunidad.',
+    'gal.i1':'Senderos entre cabañas','gal.i2':'Vista aérea · Etapa 2','gal.i3':'Fachadas abiertas a la selva','gal.i4':'Diseño modular en armonía','gal.i5':'Cabañas en la selva','gal.i6':'Arquitectura tropical','gal.i7':'Detalles arquitectónicos','gal.i8':'Interiores cálidos y luminosos','gal.i9':'Habitación premium','gal.i10':'Habitaciones para descanso profundo','gal.i11':'Volcán Arenal · La Fortuna','gal.i12':'El terreno · Etapa 2',
+    'price.eyebrow': 'Dos formas de entrar primero',
+    'price.title': 'Elige cómo quieres entrar al Founders Circle',
+    'price.subtitle': 'Acceso privado para conocer Bike &amp; Bed Etapa 2 desde adentro antes de que abra al público. Esto no es una inversión; es tu entrada al círculo Founder.',
+    'price.ins.tier': 'Founder Insider Access', 'price.ins.name': 'Insider',
+    'price.ins.desc': 'Acceso digital al círculo privado de Bike &amp; Bed Etapa 2.',
+    'price.ins.f1': 'Acceso al grupo privado de actualizaciones semanales de Etapa 2',
+    'price.ins.f2': 'Renders, avances y behind the scenes del proyecto',
+    'price.ins.f3': 'Masterclass privada: "Cómo estamos construyendo un destino turístico premium en La Fortuna"',
+    'price.ins.f4': 'Historia completa de Bike &amp; Bed: de Etapa 1 a la visión de Etapa 2',
+    'price.ins.f5': 'Tu nombre en el Founders Wall digital',
+    'price.ins.f6': 'Acceso prioritario a futuras experiencias, preventas y eventos Founder',
+    'price.ins.cta': 'ENTRAR AL FOUNDERS CIRCLE — $27.99',
+    'price.ins.micro': 'Cupos limitados para mantener la comunidad Founder cercana y curada.',
+    'price.vip.tier': 'Founder VIP Experience', 'price.vip.name': 'VIP',
+    'price.vip.desc': 'Todo lo del Insider Access, más acceso presencial en La Fortuna.',
+    'price.vip.badge': 'Solo 50 cupos VIP',
+    'price.vip.also': 'Todo lo del Founder Insider Access, más:',
+    'price.vip.f1': 'Invitación al evento privado presencial en La Fortuna',
+    'price.vip.f2': 'Tour guiado de Etapa 1 y terreno de Etapa 2 con el equipo',
+    'price.vip.f3': 'Sesión privada de preguntas con los fundadores',
+    'price.vip.f4': 'Prioridad para aplicar a futuras conversaciones privadas del proyecto, si tu perfil califica',
+    'price.vip.event.label': 'Evento Founder Presencial en La Fortuna',
+    'price.vip.event.date': '1 de Agosto 2026',
+    'price.vip.cta': 'RESERVAR MI ACCESO VIP — $99',
+    'price.vip.micro': 'Ideal para quienes quieren conocer el proyecto en persona y acercarse al equipo fundador.',
+    'price.quote': 'Esto no es una oferta de inversión. Es tu acceso privado para conocer desde adentro cómo estamos construyendo Bike &amp; Bed Etapa 2 antes de que abra al público. Las futuras oportunidades privadas, si existieran, serán compartidas únicamente con personas calificadas.',
+    'price.final.cta': 'Asegurar mi cupo',
+    'footer.copy': '© 2026 Bike &amp; Bed. Todos los derechos reservados.',
+  },
+  en: {
+    'nav.join': 'Join',
+    'hero.badge': 'Stage 2 · La Fortuna, Costa Rica',
+    'hero.title': 'Bike &amp; Bed Arenal<br>Founders Circle',
+    'hero.sub': 'Get inside access to the construction of Bike &amp; Bed Stage 2 in La Fortuna before it opens to the public.<br><br>Be part of the private circle that will see from the inside how we\'re creating a wellness cycling resort designed to unite boutique hospitality, cycling, recovery, nature and global community.<br><br>This is not an investment. It\'s your Founder access to the process, the vision and the community before Bike &amp; Bed Stage 2 opens to the public.',
+    'hero.cupos': '35 of 300 Founder spots taken',
+    'hero.cta': 'I want to join the Founders Circle',
+    'mov.eyebrow': 'The market',
+    'mov.title': 'Much more than a hotel: a global movement',
+    'mov.body': 'Did you know cycling is the most practiced sport in the world? Sports tourism will grow exponentially over the next decade.',
+    'mov.s1.year': '2024', 'mov.s1.sub': 'Global sports tourism',
+    'mov.s2.year': '2032', 'mov.s2.sub': 'Market projection',
+    'mov.cagr': 'CAGR ~16.4% · annual compound growth',
+    'mov.body2': 'Bike &amp; Bed unites cycling, nature and wellness. After Stage 1\'s tremendous success, Stage 2 establishes La Fortuna as the global hub of cycling and regenerative tourism.',
+    'mov.list.eyebrow': 'Stage 2 includes',
+    'mov.l1': '25 to 50 premium rooms',
+    'mov.l2': 'High-impact spa and biohacking lab',
+    'mov.l3': 'Healthy restaurant and performance gym',
+    'mov.l4': 'Natural thermal pools',
+    'mov.l5': 'Cowork lounge and professional bike center',
+    'mov.vision.label': 'Vision',
+    'mov.vision.text': 'To create a transformational destination where body, mind and community regenerate. It\'s not just about rest — it\'s about coming back to life.',
+    'vid.title': 'Sleep · Ride · Recover · Transform',
+    'vid.sub': 'Latin America\'s first wellness resort for cyclists',
+    'vid.cta': 'I want to join the Founders Circle',
+    'well.eyebrow': 'The heart of the project',
+    'well.title': 'The Wellness Hub',
+    'well.body': 'A sanctuary between Arenal Volcano and the tropical jungle that redefines the concept of spa.',
+    'well.c1.t': 'Sleep Retreat Zone', 'well.c1.b': 'Circadian lighting, aromatherapy, true blackout and sleep menus for deep recovery.',
+    'well.c2.t': 'Hydrothermal &amp; Recovery', 'well.c2.b': 'IR sauna, cold plunge, contrast showers and natural jacuzzis for muscle recovery.',
+    'well.c3.t': 'Biohacking Cyclist Lab', 'well.c3.b': 'Oxygen therapy, HRV testing, cryotherapy and advanced muscle recovery.',
+    'well.c4.t': 'Healthy Restaurant', 'well.c4.b': 'Functional food, ferments, cacao recovery and post-ride smoothies for optimal performance.',
+    'well.c5.t': 'Sauna Social Nights', 'well.c5.b': 'Collective ritual, mocktails, bonfire and community. Recovery as a social experience.',
+    'well.c6.t': 'Sustainability', 'well.c6.b': 'Local materials, solar energy and thermal water reuse. In harmony with the jungle.',
+    'proof.eyebrow': 'This already works',
+    'proof.s1.val': '90%', 'proof.s1.lbl': 'occupancy Dec 2025',
+    'proof.s2.val': '5',   'proof.s2.lbl': 'villas built in 7 months',
+    'proof.s3.val': '2026','proof.s3.lbl': 'confirmed reservations',
+    'proof.title': 'Stage 1 is already operating in La Fortuna',
+    'proof.body': 'We\'re not starting from scratch: 5 luxury villas built in 7 months, 90% occupancy in December 2025 (current average 75%) and reservations confirmed through end of 2026. Stage 2 scales a proven model in one of Costa Rica\'s most visited destinations.',
+    'proof.cta': 'I want to join the Founders Circle',
+    'gal.eyebrow': 'The vision',
+    'gal.title': 'We build in the shadow of Arenal',
+    'gal.body': 'Clean architecture modular cabins, immersed in the jungle and framed by the volcano. A refuge for cyclists and travelers seeking design, nature and community.',
+    'gal.i1':'Pathways between cabins','gal.i2':'Aerial view · Stage 2','gal.i3':'Facades open to the jungle','gal.i4':'Modular design in harmony','gal.i5':'Cabins in the jungle','gal.i6':'Tropical architecture','gal.i7':'Architectural details','gal.i8':'Warm and luminous interiors','gal.i9':'Premium room','gal.i10':'Rooms for deep rest','gal.i11':'Arenal Volcano · La Fortuna','gal.i12':'The land · Stage 2',
+    'price.eyebrow': 'Two ways to get in first',
+    'price.title': 'Choose how you want to join the Founders Circle',
+    'price.subtitle': 'Private access to know Bike &amp; Bed Stage 2 from the inside before it opens to the public. This is not an investment; it\'s your entry into the Founder circle.',
+    'price.ins.tier': 'Founder Insider Access', 'price.ins.name': 'Insider',
+    'price.ins.desc': 'Digital access to the private Bike &amp; Bed Stage 2 circle.',
+    'price.ins.f1': 'Access to the private Stage 2 weekly update group',
+    'price.ins.f2': 'Renders, progress updates and project behind the scenes',
+    'price.ins.f3': 'Private Masterclass: "How we\'re building a premium tourism destination in La Fortuna"',
+    'price.ins.f4': 'Full story of Bike &amp; Bed: from Stage 1 to the Stage 2 vision',
+    'price.ins.f5': 'Your name on the digital Founders Wall',
+    'price.ins.f6': 'Priority access to future experiences, pre-sales and Founder events',
+    'price.ins.cta': 'JOIN THE FOUNDERS CIRCLE — $27.99',
+    'price.ins.micro': 'Limited spots to keep the Founder community close and curated.',
+    'price.vip.tier': 'Founder VIP Experience', 'price.vip.name': 'VIP',
+    'price.vip.desc': 'Everything in Insider Access, plus in-person access in La Fortuna.',
+    'price.vip.badge': 'Only 50 VIP spots',
+    'price.vip.also': 'Everything in Founder Insider Access, plus:',
+    'price.vip.f1': 'Invitation to the private in-person event in La Fortuna',
+    'price.vip.f2': 'Guided tour of Stage 1 and Stage 2 land with the team',
+    'price.vip.f3': 'Private Q&amp;A session with the founders',
+    'price.vip.f4': 'Priority to apply for future private project conversations, if your profile qualifies',
+    'price.vip.event.label': 'Founder In-Person Event in La Fortuna',
+    'price.vip.event.date': 'August 1, 2026',
+    'price.vip.cta': 'RESERVE MY VIP ACCESS — $99',
+    'price.vip.micro': 'Ideal for those who want to experience the project in person and get closer to the founding team.',
+    'price.quote': 'This is not an investment offer. It\'s your private access to see from the inside how we\'re building Bike &amp; Bed Stage 2 before it opens to the public. Future private opportunities, if any exist, will be shared exclusively with qualified individuals.',
+    'price.final.cta': 'Secure my spot',
+    'footer.copy': '© 2026 Bike &amp; Bed. All rights reserved.',
+  }
+};
+
+// ─── LANG SWITCHER ────────────────────────────────────────────
+let currentLang = 'es';
+
+function setLang(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang;
+
+  // Update button states
+  document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  document.getElementById('btn-es').setAttribute('aria-pressed', lang === 'es');
+  document.getElementById('btn-en').setAttribute('aria-pressed', lang === 'en');
+
+  const d = TR[lang];
+
+  // Apply text content (safe, no HTML)
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (d[key] !== undefined) el.textContent = d[key];
+  });
+
+  // Apply innerHTML (for keys with <br> or &amp;)
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.dataset.i18nHtml;
+    if (d[key] !== undefined) el.innerHTML = d[key];
+  });
+
+  // HTML keys that need innerHTML via data-i18n (contain HTML entities/tags)
+  const htmlKeys = ['hero.title','hero.sub','hero.badge','well.c2.t','mov.body2','price.ins.f4','price.vip.f3','price.subtitle','price.ins.desc','price.vip.desc','price.quote','footer.copy'];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (htmlKeys.includes(key) && d[key] !== undefined) {
+      el.innerHTML = d[key];
+    }
+  });
+}
+
+// ─── NAV SCROLL ───────────────────────────────────────────────
+const nav = document.getElementById('nav');
+addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 50), { passive: true });
+
+// ─── PROGRESS BAR ─────────────────────────────────────────────
+addEventListener('load', () => {
+  setTimeout(() => {
+    const b = document.getElementById('cuposBar');
+    if (b) b.style.width = b.dataset.pct + '%';
+  }, 700);
+});
+
+// ─── REVEAL ON SCROLL ─────────────────────────────────────────
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// ─── LIGHTBOX ─────────────────────────────────────────────────
+function lb(src, alt) {
+  document.getElementById('lbImg').src = src;
+  document.getElementById('lbImg').alt = alt || '';
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLb() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+
+// ─── SMOOTH SCROLL ────────────────────────────────────────────
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+  });
+});
+</script>
+</body>
+</html>
